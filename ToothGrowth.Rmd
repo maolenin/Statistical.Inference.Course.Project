@@ -1,0 +1,97 @@
+---
+title: "Tooth Growth"
+author: "Mao Soldevilla"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+```
+
+## Overview
+
+In this project we can analyze the ToothGrowth data set included in R package
+
+```{r data}
+data("ToothGrowth")
+str(ToothGrowth)
+```
+
+According our visualization our data frame have sixty obs of three variables.
+After that, we will check with summary what kind of data is in.
+```{r summary}
+summary(ToothGrowth)
+```
+
+## Plots for analyse
+
+```{r distribution}
+d <- ToothGrowth
+g <- ggplot(d, aes(len, color = supp))
+g <- g + facet_grid(.~dose)
+g <- g + geom_density(size = 1)
+print(g)
+
+```
+As we can see there are some differences in 0.5 and 1 doses instead of 2.
+
+Now we see the data included in each plot.
+
+## Dose: 0.5
+
+Analyzing the dose = 0.5
+```{r}
+g1 <- d[d$supp == "OJ" & d$dose == 0.5, ]$len
+g2 <- d[d$supp == "VC" & d$dose == 0.5, ]$len
+difference <- g2 - g1
+mn <- mean(difference)
+s <- sd(difference)
+n <- length(difference)
+mn + c(-1, 1) * qt(.975, n - 1) * s / sqrt(n)
+```
+The T interval for dose = 0.5
+
+Making a T test
+```{r}
+t.test(difference)
+```
+The P-value is `r t.test(difference)$p.value` which is < 0.05, and that means that the dosage supply is *acceptable*
+
+## Dose: 1
+Analyzing the dose = 1
+```{r}
+g1 <- d[d$supp == "OJ" & d$dose == 1, ]$len
+g2 <- d[d$supp == "VC" & d$dose == 1, ]$len
+difference <- g2 - g1
+mn <- mean(difference)
+s <- sd(difference)
+n <- length(difference)
+mn + c(-1, 1) * qt(.975, n - 1) * s / sqrt(n)
+```
+The T interval for dose = 1
+
+Making a T test
+```{r}
+t.test(difference)
+```
+The P-value is `r t.test(difference)$p.value` which is < 0.05, and that means that the dosage supply is *acceptable*
+
+## Dose: 2
+Analyzing the dose = 2
+```{r}
+g1 <- d[d$supp == "OJ" & d$dose == 2, ]$len
+g2 <- d[d$supp == "VC" & d$dose == 2, ]$len
+difference <- g2 - g1
+mn <- mean(difference)
+s <- sd(difference)
+n <- length(difference)
+mn + c(-1, 1) * qt(.975, n - 1) * s / sqrt(n)
+```
+The T interval for dose = 2
+
+Making a T test
+```{r}
+t.test(difference)
+```
+The P-value is `r t.test(difference)$p.value` which is > 0.05, and that means that the dosage supply is *not acceptable*

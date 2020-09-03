@@ -1,0 +1,64 @@
+---
+title: "Comparison of the exponential distribution with the Central Limit Theorem"
+author: "Mao Soldevilla"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+```
+
+## Overview
+
+In this project We are investigating the exponential distribution and compare it with the Central Limit Theorem.
+The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda.
+lambda was set in 0.2 for all of the simulations.
+The distribution of averages of 40 exponentials with thousand simulations.
+
+## Simulations
+
+### Sample Theoretical
+We can get the mean and variance from the sample theoretical exponential distribution.
+```{r mav}
+exp <- rexp(1000, .2)
+summary(exp)
+var(exp)
+```
+Theoretically the mean and the standard deviation of any exponential distribution is 1/lambda: `r 1/.2`. Then the mean of our sample distribution is `r mean(exp)` and the standard deviation is `r sd(exp)` that are close to 5 in one simulation.
+
+But if we run a fourteen simulations we can check how the mean and the standard deviation are converging
+
+### comparisons
+Whit this chunk of code we can get the vectors of means and variances of 40 simulation in order to compare with the sample.
+````{r mean}
+mns = NULL
+variance = NULL
+for (i in 1 : 40){
+        s <- rexp(1000, .2)
+        mns = c(mns, mean(s))
+        variance = c(variance, var(s))
+}
+```
+
+First we can check the mean versus the sample.
+```{r}
+hist(mns, main = "Mean", xlab = "Mean")
+abline(v = mean(exp), col = "red")
+abline(v = mean(mns), col = "blue")
+
+```
+As we can see the red line is the mean of the theoretical sample and the blue one is the mean from the 40 simulations.
+
+* According to our simulation we can conclude that the mean is converging to 5 being `r mean(exp)`, and have approximately normal distribution.
+
+Second we can check the variance versus the sample.
+```{r}
+hist(variance, main = "Variance", xlab = "Variance")
+abline(v = var(exp), col = "red")
+abline(v = mean(variance), col = "blue")
+
+```
+As we can see the red line is the variance of the theoretical sample and the blue one is the mean from the 40 simulations.
+
+* According to our simulation we can conclude that the variance is converging to 25 being the variance of all simulations `r mean(variance)` for then `r sqrt(mean(variance))` the standard deviation close to theoretical, and have approximately normal distribution.
